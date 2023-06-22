@@ -2,30 +2,16 @@
 import store from '../vuex';
 import { useWallet } from 'solana-wallets-vue'
 import { Connection, clusterApiUrl, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { Metaplex , walletAdapterIdentity } from "@metaplex-foundation/js"
 
-const { publicKey, connected } = useWallet();
-
-function setBalance (balance) {
-    store.commit('setBalance', { balance });
-}
+const wallet = useWallet();
 
 async function requestAirdrop () {
-    if (!publicKey) {
-        console.error('[requestAirdrop] public key not found');
-        return;
-    }
-
     const connection = new Connection(clusterApiUrl('devnet'));
-    const signature = await connection.requestAirdrop(publicKey.value, LAMPORTS_PER_SOL);
+    const metaplex =new Metaplex(connection)
+    metaplex.use(walletAdapterIdentity(wallet))
+    console.log("Your Pubickey",metaplex.identity().publicKey._value.toString())
 
-    await connection.confirmTransaction(signature, 'confirmed');
-
-    const lamports = await connection.getBalance(publicKey.value, 'confirmed');
-    const balance = lamports / LAMPORTS_PER_SOL;
-
-    setBalance(balance);
-
-    console.log(`[requestAirdrop] success, balance is now ${balance} sol`);
 }
 </script>
 
