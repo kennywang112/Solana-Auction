@@ -1,6 +1,5 @@
 <script setup>
-import SignMessage from '../components/SignMessage';
-import SendTransaction from '../components/Claimtoken';
+import AuctionHouse from '../components/AuctionPage';
 </script>
 
 <template>
@@ -10,8 +9,7 @@ import SendTransaction from '../components/Claimtoken';
                 Basics
             </h1>
             <div class="text-center">
-                <sign-message></sign-message>
-                <send-transaction></send-transaction>
+                <auction-house></auction-house>
             </div>
       </div>
     </div>
