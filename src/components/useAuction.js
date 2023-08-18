@@ -20,6 +20,7 @@ import { BN } from "@project-serum/anchor"
 let TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')
 let TOKEN_AUTH_RULES_ID = new PublicKey('auth9SigNpDKz4sJJ1DfCTuZrZNSAgh9sFD3rboVmgg');
 let AUTH_RULES = new PublicKey("eBJLFYPxJmMGKuFwpDWkzxZeUrad92kZRC5BJLpzyT9")
+let Auction_House = new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq")
 
 let [signer, signerBump] = PublicKey.findProgramAddressSync(
 [Buffer.from('auction_house'), Buffer.from('signer')],
@@ -51,6 +52,7 @@ function getAuctionHouseTradeState(
 }
 
 export const List = async (mindId, wallet, metaplex, list_price) => {
+    
     const masterEdition = PublicKey.findProgramAddressSync(
         [
           Buffer.from('metadata'),
@@ -71,7 +73,7 @@ export const List = async (mindId, wallet, metaplex, list_price) => {
 
     const auctionHouse = await metaplex
     .auctionHouse()
-    .findByAddress({ address: new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq") });
+    .findByAddress({ address: Auction_House });
 
     const ata = getAssociatedTokenAddressSync(mindId, wallet.publicKey.value);
     const tokenRecord = PublicKey.findProgramAddressSync(
@@ -171,7 +173,7 @@ export const Bid = async (mindId, wallet, metaplex, seller, bid_price) => {
 
     const auctionHouse = await metaplex
     .auctionHouse()
-    .findByAddress({ address: new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq") });
+    .findByAddress({ address: Auction_House });
 
     const associatedAddress = getAssociatedTokenAddressSync(mindId, seller);
 
@@ -179,7 +181,7 @@ export const Bid = async (mindId, wallet, metaplex, seller, bid_price) => {
         [
             Buffer.from('auction_house'),
             (await auctionHouse).address.toBuffer(),
-            wallet.publicKey.toBuffer(),
+            wallet.publicKey.value.toBuffer(),
         ],
         new PublicKey(PROGRAM_ADDRESS)
     )
@@ -187,7 +189,7 @@ export const Bid = async (mindId, wallet, metaplex, seller, bid_price) => {
     const buyerTradeState = PublicKey.findProgramAddressSync(
         [	
             Buffer.from('auction_house'), 
-            wallet.publicKey.toBuffer(), 
+            wallet.publicKey.value.toBuffer(), 
             (await auctionHouse).address.toBuffer(), 
             associatedAddress.toBuffer(), 
             NATIVE_MINT.toBuffer(), 
@@ -199,9 +201,9 @@ export const Bid = async (mindId, wallet, metaplex, seller, bid_price) => {
     )
     const bid_ix = createBuyInstruction(
     {
-        wallet: wallet.publicKey,
-        paymentAccount: wallet.publicKey,
-        transferAuthority: wallet.publicKey,
+        wallet: wallet.publicKey.value,
+        paymentAccount: wallet.publicKey.value,
+        transferAuthority: wallet.publicKey.value,
         treasuryMint: NATIVE_MINT,
         tokenAccount: associatedAddress,
         metadata: metadata,
@@ -250,7 +252,7 @@ export const Execute = async (mindId, wallet, metaplex, seller, bid_price, buyer
 
     const auctionHouse = await metaplex
     .auctionHouse()
-    .findByAddress({ address: new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq") });
+    .findByAddress({ address: Auction_House });
 
     const buyerTradeState = PublicKey.findProgramAddressSync(
         [	Buffer.from('auction_house'), 
@@ -400,7 +402,7 @@ export const Sell = async (mindId, wallet, metaplex, bid_price, buyer) => {
     // sell at a bid price ,list at bid price and execute
     const list_ix = await List(mindId, wallet, metaplex, bid_price)
 
-    const execute_ix = await Execute(mindId, wallet, metaplex, wallet.publicKey, bid_price, buyer)
+    const execute_ix = await Execute(mindId, wallet, metaplex, wallet.publicKey.value, bid_price, buyer)
 
     const txs = [list_ix, execute_ix]
 

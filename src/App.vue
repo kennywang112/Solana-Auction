@@ -12,7 +12,8 @@ import {
   TorusWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { initWallet } from 'solana-wallets-vue';
-
+import { initMetaplex } from './components/useMetaplex';
+import { initWorkspace } from './components/useWorkspace';
 const route = useRoute()
 
 const wallets = [
@@ -23,7 +24,8 @@ const wallets = [
 ];
 
 initWallet({ wallets, autoConnect: store.state.autoConnect});
-
+initMetaplex();
+initWorkspace();
 </script>
 
 <template>
