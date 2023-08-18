@@ -73,7 +73,7 @@ export const List = async (mindId, wallet, metaplex, list_price) => {
     .auctionHouse()
     .findByAddress({ address: new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq") });
 
-    const ata = getAssociatedTokenAddressSync(mindId, wallet.publicKey);
+    const ata = getAssociatedTokenAddressSync(mindId, wallet.publicKey.value);
     const tokenRecord = PublicKey.findProgramAddressSync(
     [
         Buffer.from('metadata'),
@@ -97,7 +97,7 @@ export const List = async (mindId, wallet, metaplex, list_price) => {
 
     const [sellerTradeState, tradeBump] = getAuctionHouseTradeState(
         auctionHouse.address,
-        wallet.publicKey,
+        wallet.publicKey.value,
         ata,
         NATIVE_MINT,
         mindId,
@@ -107,7 +107,7 @@ export const List = async (mindId, wallet, metaplex, list_price) => {
 
     const [freeTradeState, freeTradeBump] = await getAuctionHouseTradeState(
         auctionHouse.address,
-        wallet.publicKey,
+        wallet.publicKey.value,
         ata,
         NATIVE_MINT,
         mindId,
@@ -129,7 +129,7 @@ export const List = async (mindId, wallet, metaplex, list_price) => {
     )
 
     const accounts = {
-        wallet: wallet.publicKey,
+        wallet: wallet.publicKey.value,
         tokenAccount: ata,
         metadata: metadata,
         authority: auctionHouse.authorityAddress,

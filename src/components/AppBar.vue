@@ -14,7 +14,7 @@ function flipAutoConnect (balance) {
     <!-- NavBar / Header -->
     <div class="navbar flex flex-row md:mb-2 shadow-lg bg-neutral text-neutral-content">
       <div class="navbar-start">
-        <router-link to="/" class="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400">
+        <router-link to="/basic" class="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400">
           <div class="hidden sm:inline w-22 h-22 md:p-2">
             <svg width="100%" height="22" viewBox="0 0 646 96" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_1064_606)">
@@ -48,12 +48,12 @@ function flipAutoConnect (balance) {
       <!-- Nav Links -->
       <div class="hidden md:inline md:navbar-center">
         <div class="flex items-stretch">
-          <router-link to="/">
+          <router-link to="/home">
             <a class="btn btn-ghost btn-sm rounded-btn">
               Home
             </a>
           </router-link>
-          <router-link to="/basic">
+          <router-link to="/">
             <a class="btn btn-ghost btn-sm rounded-btn">
               Basics
             </a>

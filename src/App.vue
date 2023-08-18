@@ -23,6 +23,7 @@ const wallets = [
 ];
 
 initWallet({ wallets, autoConnect: store.state.autoConnect});
+
 </script>
 
 <template>

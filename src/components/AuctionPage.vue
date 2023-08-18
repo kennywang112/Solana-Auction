@@ -1,18 +1,7 @@
 <script setup>
 import { useWallet } from 'solana-wallets-vue'
-import { Connection, SystemProgram,Keypair,clusterApiUrl, Transaction,PublicKey, ComputeBudgetProgram } from '@solana/web3.js';
-import { Metaplex,  lamports, walletAdapterIdentity } from "@metaplex-foundation/js";
-import { getAssociatedTokenAddressSync, getAccount ,getMint, NATIVE_MINT} from "@solana/spl-token";
-import { 
-  createSellRemainingAccountsInstruction, 
-  PROGRAM_ADDRESS, 
-  createExecuteSaleRemainingAccountsInstruction, 
-  createSellInstruction, 
-  createCancelRemainingAccountsInstruction, 
-  createExecuteSaleInstruction, 
-  createPrintBidReceiptInstruction,
-  createBuyInstruction,
-  } from "@metaplex-foundation/mpl-auction-house";
+import { Connection, Keypair,clusterApiUrl, Transaction,PublicKey, ComputeBudgetProgram } from '@solana/web3.js';
+import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import bs58 from "bs58";
 import { List, Bid, Execute, Buy, Sell } from "@/components/useAuction"
 
@@ -25,8 +14,7 @@ let mindId = new PublicKey('5wQ5FEfWHc3aayoKv8SbaF9dr5T3eHGDk7cJum2F3MQR')
 let bs = bs58.decode("Bhao6w2hvn5LtBgJ6nAno3qTy6WMyn59k7sdbFdJVsRapumSJfF86hZ1wcWJ6SxuEhuJUwC2DoNu5YTA9DyMFSy");
 let ah_auth_wallet = Keypair.fromSecretKey(bs);
 
-wallet.signTransaction = wallet.signTransaction.value
-
+//wallet.signTransaction = wallet.signTransaction.value
 
 const doList = async () => {
     wallet.publicKey = await metaplex.identity().publicKey.value

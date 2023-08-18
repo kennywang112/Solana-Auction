@@ -1,5 +1,5 @@
 <script setup>
-import AuctionHouse from '../components/AuctionPage';
+import ShowNft from '../components/ShowNft';
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import AuctionHouse from '../components/AuctionPage';
                 Basics
             </h1>
             <div class="text-center">
-                <auction-house></auction-house>
+                <show-nft></show-nft>
             </div>
       </div>
     </div>
