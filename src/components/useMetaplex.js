@@ -11,9 +11,13 @@ export const initMetaplex = () => {
     const connection = new Connection(clusterApiUrl('devnet'), "confirmed");
     const wallet = useWallet();
     if (wallet) {
+
         metaplex = Metaplex.make(connection).use(walletAdapterIdentity(wallet));
+        
     } else {
+
         metaplex = Metaplex.make(connection)
+        
     }
 
 }

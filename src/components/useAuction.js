@@ -12,6 +12,7 @@ import {
   createExecuteSaleInstruction, 
   createPrintBidReceiptInstruction,
   createBuyInstruction,
+  createPrintListingReceiptInstruction
   } from "@metaplex-foundation/mpl-auction-house";
 import bs58 from "bs58";
 import { getAssociatedTokenAddressSync, getAccount ,getMint, NATIVE_MINT } from "@solana/spl-token";
@@ -172,8 +173,8 @@ export const Bid = async (mindId, wallet, metaplex, seller, bid_price) => {
     );
 
     const auctionHouse = await metaplex
-    .auctionHouse()
-    .findByAddress({ address: Auction_House });
+        .auctionHouse()
+        .findByAddress({ address: Auction_House });
 
     const associatedAddress = getAssociatedTokenAddressSync(mindId, seller);
 
@@ -407,4 +408,44 @@ export const Sell = async (mindId, wallet, metaplex, bid_price, buyer) => {
     const txs = [list_ix, execute_ix]
 
     return txs
+}
+
+export const Print_list_receipt = async (mindId, wallet, metaplex, list_price) => {
+
+    const auctionHouse = await metaplex
+    .auctionHouse()
+    .findByAddress({ address: Auction_House });
+
+    const ata = getAssociatedTokenAddressSync(mindId, wallet.publicKey.value);
+
+    const [sellerTradeState, tradeBump] = getAuctionHouseTradeState(
+        auctionHouse.address,
+        wallet.publicKey.value,
+        ata,
+        NATIVE_MINT,
+        mindId,
+        1,
+        list_price,
+    );
+
+    const [receipt, receiptBump] = PublicKey.findProgramAddressSync(
+        [
+            Buffer.from('listing_receipt'), 
+            sellerTradeState.toBuffer()
+        ], 
+        new PublicKey(PROGRAM_ADDRESS)
+        );
+
+    const receipt_ix = createPrintListingReceiptInstruction(
+        {
+            receipt: receipt,
+            bookkeeper: wallet.publicKey.value,
+            instruction: SYSVAR_INSTRUCTIONS_PUBKEY, 
+        },
+        {
+            receiptBump: receiptBump
+        }
+    )
+
+    return receipt_ix
 }
