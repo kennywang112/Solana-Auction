@@ -17,11 +17,10 @@ let buyer = metaplex.identity().publicKey.value
 let Auction_House = new PublicKey("DYJGVipuxyXpJoPqzFLq44e5xJWRzao6qu12TTioAMWq")
 let bs = bs58.decode("Bhao6w2hvn5LtBgJ6nAno3qTy6WMyn59k7sdbFdJVsRapumSJfF86hZ1wcWJ6SxuEhuJUwC2DoNu5YTA9DyMFSy");
 let ah_auth_wallet = Keypair.fromSecretKey(bs);
-let feepayer_value = metaplex.identity().publicKey.value
 let nfts_info = ref([]);
 
-// const sign_value = metaplex.identity()._driver.walletAdapter.signTransaction.value
-// metaplex.identity()._driver.walletAdapter.signTransaction = sign_value
+const sign_value = metaplex.identity()._driver.walletAdapter.signTransaction.value
+metaplex.identity()._driver.walletAdapter.signTransaction = sign_value
 
 onMounted(async () => { 
     await find_listings();
@@ -50,6 +49,7 @@ const doBid = async () => {
     const ix = await Bid(mindId, wallet, metaplex, seller, 0.2*1000000000)
 
     const tx = new Transaction();
+    const feepayer_value = metaplex.identity().publicKey.value
     tx.feePayer = feepayer_value
     tx.add(ix)
     tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
